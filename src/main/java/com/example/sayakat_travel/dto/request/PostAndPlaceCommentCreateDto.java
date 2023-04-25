@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
 @Data
-public class PostCommentCreateDto {
+public class PostAndPlaceCommentCreateDto {
     @NotEmpty(message = "UserID is blank")
     Long userId;
     @NotEmpty(message = "Comment is blank")

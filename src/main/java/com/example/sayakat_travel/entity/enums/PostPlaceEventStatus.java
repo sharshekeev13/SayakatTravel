@@ -1,6 +1,6 @@
 package com.example.sayakat_travel.entity.enums;
 
-public enum PostStatus {
+public enum PostPlaceEventStatus {
     AWAITS,
     CONFIRMED,
     DELETED,

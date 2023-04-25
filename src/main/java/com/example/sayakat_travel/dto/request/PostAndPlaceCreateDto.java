@@ -1,11 +1,10 @@
 package com.example.sayakat_travel.dto.request;
 
-import com.example.sayakat_travel.entity.enums.PostStatus;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
 @Data
-public class PostCreateDto {
+public class PostAndPlaceCreateDto {
     @NotEmpty(message = "Title is blank")
     String title;
     @NotEmpty(message = "Description is blank")
