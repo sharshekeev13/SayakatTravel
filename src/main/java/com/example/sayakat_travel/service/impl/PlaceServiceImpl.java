@@ -14,6 +14,7 @@ import com.example.sayakat_travel.service.PlaceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,7 @@ public class PlaceServiceImpl implements PlaceService {
     private final PlaceRepository placeRepository;
     private final UserRepository userRepository;
     private final PlaceLikesRepository placeLikesRepository;
+    private final FileUploadServiceImpl fileUploadService;
 
 
     @Override
@@ -37,6 +39,12 @@ public class PlaceServiceImpl implements PlaceService {
     @Override
     public Place createPlace(PostAndPlaceCreateDto postAndPlaceCreateDto) {
         User user = userRepository.findById(postAndPlaceCreateDto.getUserId()).orElse(null);
+        String photoUrl;
+        try {
+            photoUrl = fileUploadService.uploadFile(postAndPlaceCreateDto.getPhoto());
+        } catch (IOException e) {
+            throw new ApiRequestException("Can Not Upload a Image");
+        }
         if(user == null){
             throw new ApiRequestException("User Not Found");
         }
@@ -44,7 +52,7 @@ public class PlaceServiceImpl implements PlaceService {
                 .title(postAndPlaceCreateDto.getTitle())
                 .description(postAndPlaceCreateDto.getDescription())
                 .status(PostPlaceEventStatus.AWAITS)
-                .photo(postAndPlaceCreateDto.getPhoto())
+                .photo(photoUrl)
                 .createdDate(LocalDate.now())
                 .user(user)
                 .build();
@@ -83,7 +91,13 @@ public class PlaceServiceImpl implements PlaceService {
                 oldPlace.setDescription(place.getDescription());
             }
             if(place.getPhoto() != null){
-                //TODO ADD PHOTO UPLOAD SYSTEM
+                String photoUrl;
+                try {
+                    photoUrl = fileUploadService.uploadFile(place.getPhoto());
+                } catch (IOException e) {
+                    throw new ApiRequestException("Can Not Upload a Image");
+                }
+                oldPlace.setPhoto(photoUrl);
             }
             if(place.getStatus() != null){
                 oldPlace.setStatus(place.getStatus());

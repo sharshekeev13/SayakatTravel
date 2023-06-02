@@ -7,7 +7,7 @@ import lombok.experimental.FieldDefaults;
 
 @Data
 @Entity
-@Table(name = "post_likes")
+@Table(name = "place_likes")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor

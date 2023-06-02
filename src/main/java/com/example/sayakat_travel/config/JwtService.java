@@ -11,9 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 @Service
@@ -61,12 +59,16 @@ public class JwtService {
             UserDetails userDetails,
             long expiration
     ) {
+        Calendar cal = Calendar.getInstance(Locale.ROOT);
+        Calendar cal1 = Calendar.getInstance(Locale.ROOT);
+        cal1.setTime(cal.getTime());
+        cal1.add(Calendar.SECOND, 300000);
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .setIssuedAt(cal.getTime())
+                .setExpiration(cal1.getTime())
                 .signWith(getSignKey(), SignatureAlgorithm.HS256)
                 .compact();
     }

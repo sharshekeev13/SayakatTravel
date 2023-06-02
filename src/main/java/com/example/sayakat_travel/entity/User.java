@@ -52,6 +52,12 @@ public class User implements UserDetails {
     LocalDate createdDate;
 
     @JsonIgnore
+    @Column(name = "verification_code")
+    String verificationCode;
+
+    boolean enabled;
+
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Token> tokens;
 
@@ -82,6 +88,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 }

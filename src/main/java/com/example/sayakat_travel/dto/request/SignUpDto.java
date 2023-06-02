@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class SignUpDto {
@@ -25,5 +26,5 @@ public class SignUpDto {
     String userInfo;
     @NotEmpty(message = "Phone number is blank")
     String phoneNumber;
-    String photo;
+    MultipartFile photo;
 }

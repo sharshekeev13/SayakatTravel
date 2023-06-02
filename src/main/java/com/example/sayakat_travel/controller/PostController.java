@@ -12,11 +12,14 @@ import com.example.sayakat_travel.service.PostCommentService;
 import com.example.sayakat_travel.service.impl.PostLikesServiceImpl;
 import com.example.sayakat_travel.service.impl.PostServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.UUID;
+
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @RestController
 @RequestMapping("api/post")
@@ -27,13 +30,13 @@ public class PostController {
     private final PostLikesServiceImpl postLikesService;
     private final PostCommentService postCommentService;
 
-    @PostMapping()
-    public ResponseEntity<Post> createPost(@RequestBody PostAndPlaceCreateDto postAndPlaceCreateDto){
+    @RequestMapping(path = "",method = POST, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity<Post> createPost(@ModelAttribute PostAndPlaceCreateDto postAndPlaceCreateDto){
         return ResponseEntity.ok(postService.createPost(postAndPlaceCreateDto));
     }
 
-    @PostMapping("/{id}")
-    public ResponseEntity<Post> updatePost(@PathVariable UUID id,@RequestBody PostAndPlaceUpdateDto post){
+    @RequestMapping(path = "/{id}",method = POST, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity<Post> updatePost(@PathVariable UUID id,@ModelAttribute PostAndPlaceUpdateDto post){
         return ResponseEntity.ok(postService.updatePost(id,post));
     }
 

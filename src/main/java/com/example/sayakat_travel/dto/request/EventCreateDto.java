@@ -4,13 +4,14 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
+
 @Data
-public class PostAndPlaceCreateDto {
+public class EventCreateDto {
     @NotEmpty(message = "Title is blank")
     String title;
     @NotEmpty(message = "Description is blank")
     String description;
     MultipartFile photo;
-    @NotEmpty(message = "UserID is blank")
-    Long userId;
+    LocalDate time;
 }

@@ -7,12 +7,12 @@ import lombok.experimental.FieldDefaults;
 
 @Data
 @Entity
-@Table(name = "place_comment")
+@Table(name = "event_comment")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class PlaceComment {
+public class EventComment {
 
 
     @Id
@@ -23,9 +23,8 @@ public class PlaceComment {
     User user;
 
     @ManyToOne
-    Place place;
+    Event event;
     String comment;
     CommentStatus commentStatus;
-
 
 }

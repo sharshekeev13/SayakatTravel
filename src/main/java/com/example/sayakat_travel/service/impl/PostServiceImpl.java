@@ -13,6 +13,8 @@ import com.example.sayakat_travel.repositories.UserRepository;
 import com.example.sayakat_travel.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
@@ -24,11 +26,18 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final PostLikesRepository postLikesRepository;
+    private final FileUploadServiceImpl fileUploadService;
 
 
     @Override
     public Post createPost(PostAndPlaceCreateDto postAndPlaceCreateDto){
         User user = userRepository.findById(postAndPlaceCreateDto.getUserId()).orElse(null);
+        String photoUrl;
+        try {
+            photoUrl = fileUploadService.uploadFile(postAndPlaceCreateDto.getPhoto());
+        } catch (IOException e) {
+            throw new ApiRequestException("Can Not Upload a Image");
+        }
         if(user == null){
             throw new ApiRequestException("User Not Found");
         }
@@ -36,7 +45,7 @@ public class PostServiceImpl implements PostService {
                 .title(postAndPlaceCreateDto.getTitle())
                 .description(postAndPlaceCreateDto.getDescription())
                 .status(PostPlaceEventStatus.AWAITS)
-                .photo(postAndPlaceCreateDto.getPhoto())
+                .photo(photoUrl)
                 .createdDate(LocalDate.now())
                 .user(user)
                 .build();
@@ -75,7 +84,12 @@ public class PostServiceImpl implements PostService {
                 oldPost.setDescription(post.getDescription());
             }
             if(post.getPhoto() != null){
-                //TODO ADD PHOTO UPLOAD SYSTEM
+                try {
+                    String photoUrl = fileUploadService.uploadFile(post.getPhoto());
+                    oldPost.setPhoto(photoUrl);
+                } catch (IOException e) {
+                    throw new ApiRequestException("Can Not Upload a Image");
+                }
             }
             if(post.getStatus() != null){
                 oldPost.setStatus(post.getStatus());
@@ -83,4 +97,5 @@ public class PostServiceImpl implements PostService {
         }
         return postRepository.save(oldPost);
     }
+
 }

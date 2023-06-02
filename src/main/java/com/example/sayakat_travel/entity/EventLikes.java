@@ -1,31 +1,26 @@
 package com.example.sayakat_travel.entity;
 
-import com.example.sayakat_travel.entity.enums.CommentStatus;
+
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Data
 @Entity
-@Table(name = "place_comment")
+@Table(name = "event_likes")
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@FieldDefaults(level = AccessLevel.PRIVATE)
-public class PlaceComment {
-
+public class EventLikes {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
-
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "event_id",nullable = false)
+    Event event;
     @ManyToOne
     User user;
-
-    @ManyToOne
-    Place place;
-    String comment;
-    CommentStatus commentStatus;
-
 
 }

@@ -10,12 +10,15 @@ import com.example.sayakat_travel.service.PlaceCommentService;
 import com.example.sayakat_travel.service.PostCommentService;
 import com.example.sayakat_travel.service.impl.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,16 +34,16 @@ public class PlaceController {
     public ResponseEntity<List<Place>> getAll(){
         return ResponseEntity.ok(placeService.getAll());
     }
-    @PostMapping()
-    public ResponseEntity<Place> createPlace(@RequestBody PostAndPlaceCreateDto postAndPlaceCreateDto){
+    @RequestMapping(method = POST, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity<Place> createPlace(@ModelAttribute PostAndPlaceCreateDto postAndPlaceCreateDto){
         return ResponseEntity.ok(placeService.createPlace(postAndPlaceCreateDto));
     }
     @GetMapping("/{id}")
     public ResponseEntity<PostAndPlaceFindOneDto> getPlaceById(@PathVariable UUID id){
         return ResponseEntity.ok(placeService.findPlaceById(id));
     }
-    @PostMapping("/{id}")
-    public ResponseEntity<Place> updatePlace(@PathVariable UUID id, @RequestBody PostAndPlaceUpdateDto place){
+    @RequestMapping(path = "/{id}",method = POST, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity<Place> updatePlace(@PathVariable UUID id, @ModelAttribute PostAndPlaceUpdateDto place){
         return ResponseEntity.ok(placeService.updatePlace(id,place));
     }
     @PostMapping("/{placeId}/{userId}")
